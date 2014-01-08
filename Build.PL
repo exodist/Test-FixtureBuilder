@@ -17,6 +17,7 @@ my $build = Module::Build->new(
     },
     build_requires => {
         'DBD::SQLite' => '1.40',
+        'Fennec'      => '2.013',
     },
     meta_merge => {
         resources => {

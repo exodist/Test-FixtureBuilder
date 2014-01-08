@@ -7,13 +7,10 @@ our $VERSION = '0.001';
 use Exporter::Declare;
 
 use Scalar::Util qw/blessed/;
-use Carp qw/croak/;
+use Carp qw/croak confess/;
 
 gen_default_export FIXTURE_BUILDER_META => sub {
     my ($exporter, $importer) = @_;
-
-    croak "'$exporter' is not a subclass of Test::FixtureBuilder"
-        unless $exporter && $exporter->isa( __PACKAGE__ );
 
     my $meta = { class => $exporter };
     return sub { $meta };
@@ -87,6 +84,12 @@ default_export fixture_row => sub {
 
     return $meta->{builder}->insert_row( $meta->{table} => $row );
 };
+
+sub after_import {
+    my $class = shift;
+    my ($importer, $specs) = @_;
+    $importer->FIXTURE_BUILDER_META->{class} = $class;
+}
 
 sub name_to_handle {
     my $class = shift;
