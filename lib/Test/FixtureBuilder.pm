@@ -9,10 +9,14 @@ use Exporter::Declare;
 use Scalar::Util qw/blessed/;
 use Carp qw/croak confess/;
 
-gen_default_export FIXTURE_BUILDER_META => sub {
-    my ($exporter, $importer) = @_;
+sub after_import {
+    my $class = shift;
+    my ($importer, $specs) = @_;
+    $importer->FIXTURE_BUILDER_META->{class} = $class;
+}
 
-    my $meta = { class => $exporter };
+gen_default_export FIXTURE_BUILDER_META => sub {
+    my $meta = { class => undef };
     return sub { $meta };
 };
 
@@ -84,12 +88,6 @@ default_export fixture_row => sub {
 
     return $meta->{builder}->insert_row( $meta->{table} => $row );
 };
-
-sub after_import {
-    my $class = shift;
-    my ($importer, $specs) = @_;
-    $importer->FIXTURE_BUILDER_META->{class} = $class;
-}
 
 sub name_to_handle {
     my $class = shift;
