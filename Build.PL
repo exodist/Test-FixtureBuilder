@@ -13,8 +13,6 @@ my $build = Module::Build->new(
         'Exporter::Declare' => 0,
         'Scalar::Util'      => 0,
     },
-    recommends => {
-    },
     build_requires => {
         'DBD::SQLite' => '1.40',
         'Fennec'      => '2.013',
